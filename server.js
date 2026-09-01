@@ -5,6 +5,12 @@ const path = require('path');
 const app = express();
 const PORT = process.env.PORT || 10000;
 
+// ዋናው ገጽ (Home Route)
+app.get('/', (req, res) => {
+    res.sendFile(path.join(__dirname, 'index.php')); 
+    // HTML ከሆነ 'index.html' ብለው ይቀይሩት
+});
+
 // Static ፋይሎችን እና uploads ፎልደርን ለማስተናገድ
 app.use(express.static(__dirname));
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
