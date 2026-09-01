@@ -16,14 +16,14 @@ app.get('/', (req, res) => {
 
 // MySQL Connection
 const db = mysql.createPool({
-    host: process.env.DB_HOST || 'localhost',
-    user: process.env.DB_USER || 'root',
-    password: process.env.DB_PASSWORD || '',
-    database: process.env.DB_NAME || 'restaurant_db',
+    host: process.env.DB_HOST,
+    port: process.env.DB_PORT || 22746,
+    user: process.env.DB_USER,
+    password: process.env.DB_PASSWORD,
+    database: process.env.DB_NAME,
     waitForConnections: true,
     connectionLimit: 10
 });
-
 app.get('/api/menu', (req, res) => {
     db.query('SELECT * FROM menu_items', (err, results) => {
         if (err) return res.status(500).json({ error: err.message });
