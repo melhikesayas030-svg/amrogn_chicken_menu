@@ -3,18 +3,19 @@ const mysql = require('mysql2');
 const path = require('path');
 
 const app = express();
-const PORT = process.env.PORT || 22746;
+const PORT = process.env.PORT || 10000;
 
-app.use(express.static(__dirname));
+// Middleware for static files & JSON parsing
+app.use(express.static(path.join(__dirname)));
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 app.use(express.json());
 
-// ዋናውን ገጽ ለማሳየት የተጨመረ
+// 1. ዋናውን index.html ገጽ ለማሳየት
 app.get('/', (req, res) => {
     res.sendFile(path.join(__dirname, 'index.html'));
 });
 
-// MySQL Connection
+// 2. MySQL Connection (Aiven MySQL Configuration with SSL support)
 const db = mysql.createPool({
     host: process.env.DB_HOST,
     port: process.env.DB_PORT || 22746,
@@ -22,15 +23,24 @@ const db = mysql.createPool({
     password: process.env.DB_PASSWORD,
     database: process.env.DB_NAME,
     waitForConnections: true,
-    connectionLimit: 10
+    connectionLimit: 10,
+    ssl: {
+        rejectUnauthorized: false // Aiven MySQL SSL Connection ለማድረግ አስፈላጊ ነው
+    }
 });
+
+// 3. API Route for Menu Items
 app.get('/api/menu', (req, res) => {
     db.query('SELECT * FROM menu_items', (err, results) => {
-        if (err) return res.status(500).json({ error: err.message });
+        if (err) {
+            console.error('Database Error:', err.message);
+            return res.status(500).json({ error: 'Database connection or query failed' });
+        }
         res.json(results);
     });
 });
 
+// Server Listening
 app.listen(PORT, () => {
     console.log(`Server is running on port ${PORT}`);
 });
