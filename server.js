@@ -11,7 +11,7 @@ app.use(express.json());
 
 // ዋናውን ገጽ ለማሳየት የተጨመረ
 app.get('/', (req, res) => {
-    res.sendFile(path.join(__dirname, 'index.php'));
+    res.sendFile(path.join(__dirname, 'index.html'));
 });
 
 // MySQL Connection
