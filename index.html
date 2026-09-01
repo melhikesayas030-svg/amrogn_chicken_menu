@@ -1,52 +1,161 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Amrogn Chicken - Digital Menu</title>
+    <style>
+        :root { --primary: #d32f2f; --accent: #fbc02d; --bg: #fdfbf7; --text: #2c3e50; }
+        body { font-family: 'Segoe UI', sans-serif; background-color: var(--bg); color: var(--text); margin: 0; padding-bottom: 40px; }
+        
+        /* Category Filter Bar */
+        .category-filter { display: flex; flex-wrap: wrap; gap: 8px; justify-content: center; margin: 20px 0; }
+        .filter-btn { padding: 8px 16px; border-radius: 20px; background: #e0e0e0; color: #333; text-decoration: none; font-size: 0.9rem; font-weight: bold; transition: 0.2s; border: none; cursor: pointer; }
+        .filter-btn.active, .filter-btn:hover { background: var(--primary); color: #fff; }
+
+        /* Public Menu Styles */
+        .container { max-width: 900px; margin: 0 auto; padding: 0 20px; }
+        header { text-align: center; padding: 20px 0; border-bottom: 3px solid var(--primary); margin-bottom: 20px; }
+        header h1 { color: var(--primary); margin: 0; font-size: 2.5rem; }
+        .category-title { color: var(--primary); border-bottom: 2px solid var(--accent); padding-bottom: 5px; margin-top: 30px; }
+        .menu-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 15px; margin-top: 15px; }
+        .card { background: #ffffff; padding: 15px; border-radius: 8px; box-shadow: 0 2px 5px rgba(0,0,0,0.05); border-left: 4px solid var(--primary); display: flex; gap: 12px; align-items: center; }
+        .card-img { width: 80px; height: 80px; object-fit: cover; border-radius: 6px; flex-shrink: 0; background: #f0f0f0; }
+        .card-content { flex-grow: 1; display: flex; justify-content: space-between; align-items: center; }
+        .card-info h3 { margin: 0 0 5px 0; font-size: 1.05rem; }
+        .card-info p { margin: 0; font-size: 0.85rem; color: #666; }
+        .price { font-weight: bold; color: var(--primary); font-size: 1.1rem; white-space: nowrap; margin-left: 10px; }
+        
+        /* Search Box */
+        .search-box { margin: 20px 0; text-align: center; }
+        .search-box input { width: 80%; max-width: 400px; padding: 10px; border: 2px solid var(--primary); border-radius: 20px; outline: none; }
+        
+        /* Feedback Section */
+        .feedback-section { background: #fff; padding: 20px; border-radius: 8px; margin-top: 40px; box-shadow: 0 2px 5px rgba(0,0,0,0.05); }
+        .star-rating { display: flex; flex-direction: row-reverse; justify-content: flex-end; gap: 5px; margin: 10px 0; }
+        .star-rating input { display: none; }
+        .star-rating label { font-size: 1.8rem; color: #ccc; cursor: pointer; }
+        .star-rating input:checked ~ label, .star-rating label:hover, .star-rating label:hover ~ label { color: var(--accent); }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <header>
+        <h1>Amrogn Chicken</h1>
+        <small style="color: #666;">We Speak Chicken!</small>
+    </header>
+
+    <!-- Search Bar -->
+    <div class="search-box">
+        <input type="text" id="searchInput" placeholder="Search menu items..." onkeyup="filterMenu()">
+    </div>
+
+    <!-- Category Filter Bar -->
+    <div class="category-filter" id="categoryButtons">
+        <button class="filter-btn active" onclick="selectCategory('All')">All</button>
+    </div>
+
+    <!-- Menu Container -->
+    <div id="menuContainer">
+        <p style="text-align: center; color: #666;">Loading menu...</p>
+    </div>
+
+    <!-- Feedback & Reviews Section -->
+    <div class="feedback-section">
+        <h2>Customer Reviews & Feedback</h2>
+        <div id="feedbackMsg"></div>
+
+        <form id="feedbackForm" style="margin-bottom: 30px;" onsubmit="submitFeedback(event)">
+            <input type="text" id="customer_name" placeholder="Your Name" required style="width: 100%; padding: 8px; margin-bottom: 10px; box-sizing: border-box;">
+            
+            <label>Rating:</label>
+            <div class="star-rating">
+                <input type="radio" id="star5" name="rating" value="5" required><label for="star5">★</label>
+                <input type="radio" id="star4" name="rating" value="4"><label for="star4">★</label>
+                <input type="radio" id="star3" name="rating" value="3"><label for="star3">★</label>
+                <input type="radio" id="star2" name="rating" value="2"><label for="star2">★</label>
+                <input type="radio" id="star1" name="rating" value="1"><label for="star1">★</label>
+            </div>
+            
+            <textarea id="comment" placeholder="Leave your review..." required style="width: 100%; height: 80px; padding: 8px; box-sizing: border-box;"></textarea>
+            <button type="submit" style="background: var(--primary); color: #fff; border: none; padding: 10px 20px; font-weight: bold; border-radius: 4px; margin-top: 10px;Here is a review of your script along with critical bug fixes, security enhancements, and structural improvements.
+
+---
+
+### Critical Issues & Fixes
+
+1. **SQL Injection Vulnerability (Line 34):** 
+   - **Issue:** `$editId` was inserted directly into an unsanitized SQL query (`SELECT * FROM menu_items WHERE id = $editId`).
+   - **Fix:** Switched to a prepared statement.
+
+2. **Uncaught Error in `getMenuItemsGrouped()`:**
+   - **Issue:** The call to `getMenuItemsGrouped($conn)` does not pass `$searchQuery`, meaning search inputs were ignored by your database fetching logic.
+   - **Fix:** Pass `$searchQuery` into `getMenuItemsGrouped($conn, $searchQuery)`.
+
+3. **HTML Layout Misalignment:**
+   - **Issue:** The `<div class="feedback-section">` block opened outside the main `.container` wrapper, causing inconsistent padding and layout width compared to the menu section.
+   - **Fix:** Nested the feedback section properly within `.container`.
+
+---
+
+### Updated Code
+
+```php
 <?php
 session_start();
 require_once 'db.php';
 
 $isAdmin = isset($_SESSION['admin_logged_in']) && $_SESSION['admin_logged_in'] === true;
+
 // Process Customer Feedback Submission
 $feedbackMsg = '';
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['submit_feedback'])) {
-    $cName = trim($_POST['customer_name']);
-    $rating = intval($_POST['rating']);
-    $comment = trim($_POST['comment']);
+    $cName = trim($_POST['customer_name'] ?? '');
+    $rating = intval($_POST['rating'] ?? 0);
+    $comment = trim($_POST['comment'] ?? '');
 
     if (!empty($cName) && $rating >= 1 && $rating <= 5 && !empty($comment)) {
         $stmt = $conn->prepare("INSERT INTO feedback (customer_name, rating, comment) VALUES (?, ?, ?)");
         $stmt->bind_param("sis", $cName, $rating, $comment);
         $stmt->execute();
+        $stmt->close();
         $feedbackMsg = "Thank you! Your feedback has been submitted.";
     }
 }
 
 // Fetch Feedback Stats & Reviews
 $avgRatingRes = $conn->query("SELECT AVG(rating) as avg_rating, COUNT(*) as total_reviews FROM feedback");
-$ratingData = $avgRatingRes->fetch_assoc();
+$ratingData = $avgRatingRes ? $avgRatingRes->fetch_assoc() : [];
 $avgRating = round($ratingData['avg_rating'] ?? 0, 1);
 $totalReviews = $ratingData['total_reviews'] ?? 0;
 
 $reviewsRes = $conn->query("SELECT * FROM feedback ORDER BY created_at DESC LIMIT 5");
 
-// Fetch Menu Items
-$menuData = getMenuItemsGrouped($conn);
-$categories = array_keys($menuData);
-$selectedCategory = $_GET['cat'] ?? 'All';
+// Fetch Menu Items (Passing search query if function supports it)
 $searchQuery = trim($_GET['search'] ?? '');
+$selectedCategory = $_GET['cat'] ?? 'All';
 
-// Fetch item for editing if ID is supplied
+$menuData = function_exists('getMenuItemsGrouped') ? getMenuItemsGrouped($conn, $searchQuery) : [];
+$categories = array_keys($menuData);
+
+// Fetch item for editing if ID is supplied (Secured via Prepared Statement)
 $editItem = null;
 if ($isAdmin && isset($_GET['edit_id'])) {
     $editId = intval($_GET['edit_id']);
-    $res = $conn->query("SELECT * FROM menu_items WHERE id = $editId");
-    $editItem = $res->fetch_assoc();
+    $stmt = $conn->prepare("SELECT * FROM menu_items WHERE id = ?");
+    $stmt->bind_param("i", $editId);
+    $stmt->execute();
+    $editItem = $stmt->get_result()->fetch_assoc();
+    $stmt->close();
 }
-
 ?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Amrogn Chicken - digitL Menu</title>
+    <title>Amrogn Chicken - Digital Menu</title>
     <style>
         :root { --primary: #d32f2f; --accent: #fbc02d; --bg: #fdfbf7; --text: #2c3e50; }
         body { font-family: 'Segoe UI', sans-serif; background-color: var(--bg); color: var(--text); margin: 0; padding-bottom: 40px; }
@@ -63,7 +172,7 @@ if ($isAdmin && isset($_GET['edit_id'])) {
         .category-filter { display: flex; flex-wrap: wrap; gap: 8px; justify-content: center; margin: 20px 0; }
         .filter-btn { padding: 8px 16px; border-radius: 20px; background: #e0e0e0; color: #333; text-decoration: none; font-size: 0.9rem; font-weight: bold; transition: 0.2s; }
         .filter-btn.active, .filter-btn:hover { background: var(--primary); color: #fff; }
- 
+
         /* Public Menu Styles */
         .container { max-width: 900px; margin: 0 auto; padding: 0 20px; }
         header { text-align: center; padding: 20px 0; border-bottom: 3px solid var(--primary); margin-bottom: 20px; }
@@ -78,9 +187,11 @@ if ($isAdmin && isset($_GET['edit_id'])) {
         .price { font-weight: bold; color: var(--primary); font-size: 1.1rem; white-space: nowrap; margin-left: 10px; }
         .admin-actions { margin-top: 8px; font-size: 0.8rem; }
         .admin-actions a { color: #d32f2f; text-decoration: none; margin-right: 10px; }
+        
         /* Search Bar */
         .search-box { margin: 20px 0; text-align: center; }
         .search-box input { width: 80%; max-width: 400px; padding: 10px; border: 2px solid var(--primary); border-radius: 20px; outline: none; }
+        
         /* Feedback Section */
         .feedback-section { background: #fff; padding: 20px; border-radius: 8px; margin-top: 40px; box-shadow: 0 2px 5px rgba(0,0,0,0.05); }
         .star-rating { display: flex; flex-direction: row-reverse; justify-content: flex-end; gap: 5px; margin: 10px 0; }
@@ -93,7 +204,7 @@ if ($isAdmin && isset($_GET['edit_id'])) {
 
 <?php if ($isAdmin): ?>
     <div class="admin-bar">
-        <span>Logged in as <strong><?php echo htmlspecialchars($_SESSION['username']); ?></strong></span>
+        <span>Logged in as <strong><?php echo htmlspecialchars($_SESSION['username'] ?? 'Admin'); ?></strong></span>
         <div>
             <a href="generate_qr.php" target="_blank">Get QR Code</a>
             <a href="index.php">Refresh View</a>
@@ -101,33 +212,33 @@ if ($isAdmin && isset($_GET['edit_id'])) {
         </div>
     </div>
 
-   <div class="admin-form-container">
-    <h3><?php echo $editItem ? "Edit Menu Item" : "Add New Menu Item"; ?></h3>
-    <form action="admin.php" method="POST" enctype="multipart/form-data">
-        <?php if ($editItem): ?>
-            <input type="hidden" name="id" value="<?php echo $editItem['id']; ?>">
-            <input type="hidden" name="existing_image" value="<?php echo htmlspecialchars($editItem['image_url'] ?? ''); ?>">
-        <?php endif; ?>
-        
-        <div class="form-grid">
-            <input type="text" name="category" placeholder="Category" value="<?php echo htmlspecialchars($editItem['category'] ?? ''); ?>" required>
-            <input type="text" name="name" placeholder="Item Name" value="<?php echo htmlspecialchars($editItem['name'] ?? ''); ?>" required>
-            <input type="text" name="variant" placeholder="Variant (e.g. 2 pcs, Half)" value="<?php echo htmlspecialchars($editItem['variant'] ?? ''); ?>">
-            <input type="number" step="0.01" name="price" placeholder="Price (ETB)" value="<?php echo htmlspecialchars($editItem['price'] ?? ''); ?>" required>
-        </div>
-        
-        <div style="margin-top: 10px; display: flex; gap: 10px;">
-            <input type="text" name="description" placeholder="Description / Side details" value="<?php echo htmlspecialchars($editItem['description'] ?? ''); ?>" style="flex-grow: 1; padding: 8px;">
-            <input type="file" name="image" accept="image/*" style="padding: 5px;">
-            <label><input type="checkbox" name="is_available" value="1" <?php echo (!isset($editItem) || $editItem['is_available'] == 1) ? 'checked' : ''; ?>> Available</label>
-        </div>
-        
-        <button type="submit" class="btn-submit"><?php echo $editItem ? "Update Item" : "Save Item"; ?></button>
-        <?php if ($editItem): ?>
-            <a href="index.php" style="margin-left: 10px; color: #666; text-decoration: none;">Cancel</a>
-        <?php endif; ?>
-    </form>
-</div>
+    <div class="admin-form-container">
+        <h3><?php echo $editItem ? "Edit Menu Item" : "Add New Menu Item"; ?></h3>
+        <form action="admin.php" method="POST" enctype="multipart/form-data">
+            <?php if ($editItem): ?>
+                <input type="hidden" name="id" value="<?php echo $editItem['id']; ?>">
+                <input type="hidden" name="existing_image" value="<?php echo htmlspecialchars($editItem['image_url'] ?? ''); ?>">
+            <?php endif; ?>
+            
+            <div class="form-grid">
+                <input type="text" name="category" placeholder="Category" value="<?php echo htmlspecialchars($editItem['category'] ?? ''); ?>" required>
+                <input type="text" name="name" placeholder="Item Name" value="<?php echo htmlspecialchars($editItem['name'] ?? ''); ?>" required>
+                <input type="text" name="variant" placeholder="Variant (e.g. 2 pcs, Half)" value="<?php echo htmlspecialchars($editItem['variant'] ?? ''); ?>">
+                <input type="number" step="0.01" name="price" placeholder="Price (ETB)" value="<?php echo htmlspecialchars($editItem['price'] ?? ''); ?>" required>
+            </div>
+            
+            <div style="margin-top: 10px; display: flex; gap: 10px; align-items: center;">
+                <input type="text" name="description" placeholder="Description / Side details" value="<?php echo htmlspecialchars($editItem['description'] ?? ''); ?>" style="flex-grow: 1; padding: 8px;">
+                <input type="file" name="image" accept="image/*" style="padding: 5px;">
+                <label><input type="checkbox" name="is_available" value="1" <?php echo (!isset($editItem) || $editItem['is_available'] == 1) ? 'checked' : ''; ?>> Available</label>
+            </div>
+            
+            <button type="submit" class="btn-submit"><?php echo $editItem ? "Update Item" : "Save Item"; ?></button>
+            <?php if ($editItem): ?>
+                <a href="index.php" style="margin-left: 10px; color: #666; text-decoration: none;">Cancel</a>
+            <?php endif; ?>
+        </form>
+    </div>
 <?php endif; ?>
 
 <div class="container">
@@ -194,14 +305,16 @@ if ($isAdmin && isset($_GET['edit_id'])) {
             <?php endforeach; ?>
         </div>
     <?php endforeach; ?>
-</div>
 
-<!-- Feedback & Reviews Section -->
+    <!-- Feedback & Reviews Section -->
     <div class="feedback-section">
         <h2>Customer Reviews & Feedback</h2>
+        <?php if ($totalReviews > 0): ?>
+            <p><strong>Average Rating:</strong> <?php echo $avgRating; ?> ★ (<?php echo $totalReviews; ?> reviews)</p>
+        <?php endif; ?>
         
         <?php if ($feedbackMsg): ?>
-            <p style="color: green; font-weight: bold;"><?php echo $feedbackMsg; ?></p>
+            <p style="color: green; font-weight: bold;"><?php echo htmlspecialchars($feedbackMsg); ?></p>
         <?php endif; ?>
 
         <!-- Feedback Form -->
@@ -224,14 +337,18 @@ if ($isAdmin && isset($_GET['edit_id'])) {
 
         <!-- Display Recent Reviews -->
         <h3>Recent Feedback</h3>
-        <?php while ($rev = $reviewsRes->fetch_assoc()): ?>
-            <div style="border-bottom: 1px solid #eee; padding: 10px 0;">
-                <strong><?php echo htmlspecialchars($rev['customer_name']); ?></strong>
-                <span style="color: var(--accent); font-weight: bold;"> - <?php echo $rev['rating']; ?> ★</span>
-                <p style="margin: 5px 0; font-size: 0.9rem;"><?php echo htmlspecialchars($rev['comment']); ?></p>
-                <small style="color: #999;"><?php echo date('M d, Y', strtotime($rev['created_at'])); ?></small>
-            </div>
-        <?php endwhile; ?>
+        <?php if ($reviewsRes && $reviewsRes->num_rows > 0): ?>
+            <?php while ($rev = $reviewsRes->fetch_assoc()): ?>
+                <div style="border-bottom: 1px solid #eee; padding: 10px 0;">
+                    <strong><?php echo htmlspecialchars($rev['customer_name']); ?></strong>
+                    <span style="color: var(--accent); font-weight: bold;"> - <?php echo intval($rev['rating']); ?> ★</span>
+                    <p style="margin: 5px 0; font-size: 0.9rem;"><?php echo htmlspecialchars($rev['comment']); ?></p>
+                    <small style="color: #999;"><?php echo date('M d, Y', strtotime($rev['created_at'])); ?></small>
+                </div>
+            <?php endwhile; ?>
+        <?php else: ?>
+            <p style="color: #666; font-size: 0.9rem;">No reviews submitted yet.</p>
+        <?php endif; ?>
     </div>
 </div>
 
