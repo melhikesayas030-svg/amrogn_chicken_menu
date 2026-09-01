@@ -5,16 +5,14 @@ const path = require('path');
 const app = express();
 const PORT = process.env.PORT || 10000;
 
-// ዋናው ገጽ (Home Route)
-app.get('/', (req, res) => {
-    res.sendFile(path.join(__dirname, 'index.php')); 
-    // HTML ከሆነ 'index.html' ብለው ይቀይሩት
-});
-
-// Static ፋይሎችን እና uploads ፎልደርን ለማስተናገድ
 app.use(express.static(__dirname));
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 app.use(express.json());
+
+// ዋናውን ገጽ ለማሳየት የተጨመረ
+app.get('/', (req, res) => {
+    res.sendFile(path.join(__dirname, 'index.php'));
+});
 
 // MySQL Connection
 const db = mysql.createPool({
@@ -26,7 +24,6 @@ const db = mysql.createPool({
     connectionLimit: 10
 });
 
-// የሜኑ ዳታ ማምጫ API (እነ index.php ላይ በ JS fetch ለማድረግ)
 app.get('/api/menu', (req, res) => {
     db.query('SELECT * FROM menu_items', (err, results) => {
         if (err) return res.status(500).json({ error: err.message });
